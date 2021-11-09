@@ -46,7 +46,7 @@ async function run() {
         const appointmentCollection = database.collection('Appointments');
         const usersCollection = database.collection('Users');
 
-        app.get('/appointments', async (req, res) => {
+        app.get('/appointments', verifyToken, async (req, res) => {
             const email = req.query.email;
             const date = new Date(req.query.date).toLocaleDateString();
             console.log(date)
@@ -55,7 +55,7 @@ async function run() {
             const appointments = await cursor.toArray();
             res.json(appointments)
         })
-        app.post('/appointments', verifyToken, async (req, res) => {
+        app.post('/appointments', async (req, res) => {
             const appointment = req.body;
             const result = await appointmentCollection.insertOne(appointment)
             res.json(result)
